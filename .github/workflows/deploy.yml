@@ -2,28 +2,21 @@ name: Deploy to Railway
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli@latest
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install Railway CLI (v3)
-        run: npm install -g @railway/cli
-
-      - name: Deploy to Railway
+      - name: Login to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          railway login --token $RAILWAY_TOKEN
-          railway up --service distribuida
+        run: railway login --token $RAILWAY_TOKEN
+
+      - name: Deploy
+        run: railway up --detach
