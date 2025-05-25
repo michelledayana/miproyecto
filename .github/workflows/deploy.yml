@@ -8,15 +8,26 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      # 1. Descarga el código del repositorio
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 2. Instala Node.js (necesario para Railway CLI)
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # 3. Instala la CLI de Railway (versión estable)
       - name: Install Railway CLI
-        run: npm install -g @railway/cli@latest
+        run: npm install -g @railway/cli@3.0.1
 
-      - name: Set Railway Token
-        run: echo "RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }}" >> $GITHUB_ENV
+      # 4. Configura el token de acceso (usando GitHub Secrets)
+      - name: Login to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: echo "$RAILWAY_TOKEN" | railway login
 
+      # 5. Despliega la aplicación
       - name: Deploy to Railway
-        run: |
-          railway up --token $RAILWAY_TOKEN --detach
+        run: railway up --detach
