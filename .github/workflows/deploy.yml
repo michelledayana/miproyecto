@@ -16,7 +16,7 @@ jobs:
           echo "Estructura del proyecto:"
           ls -R
           echo ""
-          echo "Contenido de requirements.txt:"
+          echo "Contenido de requeriments.txt:"
           cat backend/requirements.txt
 
       - name: Install Railway CLI
