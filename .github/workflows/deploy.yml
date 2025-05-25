@@ -1,4 +1,4 @@
-name: Deploy to Railway
+name: Deploy FastAPI to Railway
 
 on:
   push:
@@ -8,7 +8,16 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - run: npm install -g @railway/cli
-      - run: railway login --token ${{ secrets.RAILWAY_TOKEN }}
-      - run: railway up --detach
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Login to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: railway login --token $RAILWAY_TOKEN
+
+      - name: Deploy to Railway
+        run: railway up --service=my-fastapi-app --detach
