@@ -1,4 +1,4 @@
-name: Deploy to Railway
+name: Deploy Docker to Railway
 
 on:
   push:
@@ -8,26 +8,26 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      # 1. Descarga el código del repositorio
-      - name: Checkout code
+      # 1. Descargar el código
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Instala Node.js (necesario para Railway CLI)
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+      # 2. Configurar Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      # 3. Instala la CLI de Railway (versión estable)
+      # 3. Instalar CLI de Railway (versión específica estable)
       - name: Install Railway CLI
         run: npm install -g @railway/cli@3.0.1
 
-      # 4. Configura el token de acceso (usando GitHub Secrets)
+      # 4. Autenticación con token (método alternativo seguro)
       - name: Login to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: echo "$RAILWAY_TOKEN" | railway login
+        run: |
+          mkdir -p ~/.railway
+          echo "token: $RAILWAY_TOKEN" > ~/.railway/config.yml
 
-      # 5. Despliega la aplicación
+      # 5. Despliegue con Docker
       - name: Deploy to Railway
-        run: railway up --detach
+        run: railway up --service=my-docker-app --detach
