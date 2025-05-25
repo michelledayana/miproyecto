@@ -3,10 +3,10 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Copia requirements.txt primero
-COPY backend/requirements.txt .
+COPY backend/requeriments.txt .
 
 # Instala dependencias
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requeriments.txt
 
 # Copia toda la aplicación
 COPY backend .
