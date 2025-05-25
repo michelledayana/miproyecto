@@ -1,17 +1,19 @@
+# Base image
 FROM python:3.9-slim
 
+# Set working directory
 WORKDIR /app
 
-# Copia requirements.txt primero para cachear dependencias
-COPY ./bakend/requirements.txt .   # Añadido ./
-
+# Install dependencies
+COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia TODO el contenido de backend
-COPY ./bakend/ .   # Cambiado de '/backend' a './backend/'
+# Copy application code
+COPY backend .
 
-# Configuración del puerto
+# Environment variables
 ENV PORT=8000
-EXPOSE $PORT
+ENV PYTHONPATH=/app
 
+# Run the application
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "${PORT}"]
