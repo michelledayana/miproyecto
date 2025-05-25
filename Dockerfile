@@ -2,16 +2,16 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
-# Copia primero requirements.txt para cachear dependencias
-COPY backend/requirements.txt .
+# Copia requirements.txt primero para cachear dependencias
+COPY ./bakend/requirements.txt .   # Añadido ./
 
-# Instala dependencias
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia el resto de los archivos
-COPY backend /app
+# Copia TODO el contenido de backend
+COPY ./bakend/ .   # Cambiado de '/backend' a './backend/'
 
-# Puerto y comando de ejecución
+# Configuración del puerto
 ENV PORT=8000
 EXPOSE $PORT
+
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "${PORT}"]
