@@ -2,15 +2,12 @@ from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
-import os
 
 app = FastAPI()
 
-# Montar archivos estáticos (CSS, JS, imágenes)
+# Montar archivos estáticos (CSS)
 app.mount("/static", StaticFiles(directory="static"), name="static")
-
-# Cargar plantillas desde la carpeta templates
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory="static")
 
 @app.get("/", response_class=HTMLResponse)
 async def hola_mundo(request: Request):
@@ -21,5 +18,4 @@ async def hola_mundo(request: Request):
 
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.getenv("PORT", 8000))  # Compatible con Railway
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=8000) esta bien el codigo del main
