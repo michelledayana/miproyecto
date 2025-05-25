@@ -1,19 +1,20 @@
 FROM python:3.9-slim
 
+# Establecer directorio de trabajo
 WORKDIR /app
 
-# Copia requirements.txt primero
-COPY backend/requeriments.txt .
+# Copiar y renombrar requirements.txt
+COPY backend/requirements.txt .
 
-# Instala dependencias
-RUN pip install --no-cache-dir -r requeriments.txt
+# Instalar dependencias
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia toda la aplicación
-COPY backend .
+# Copiar el resto de la aplicación
+COPY backend/ .
 
-# Configura puerto
+# Configurar puerto para Railway
 ENV PORT=8000
 EXPOSE $PORT
 
-# Comando de ejecución
+# Comando para ejecutar FastAPI con uvicorn
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
